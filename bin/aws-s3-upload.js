@@ -14,6 +14,9 @@ const fs = require('fs')
 // require mime module
 const mime = require('mime')
 
+// require node path module
+const path = require('path')
+
 // script should accept file as 2nd argument
 // print to make sure it does
 console.log("file you're uploading is ", process.argv[2])
@@ -38,13 +41,21 @@ const s3Upload = function (options) {
   // https://www.npmjs.com/package/mime
   const contentType = mime.lookup(options.path)
 
+  // use node path module to get image extension (.jpg, .gif)
+  // https://nodejs.org/docs/latest/api/path.html#path_path
+  const ext = path.extname(options.path)
+
+  // get current date, turn into ISO string, and split to access formatted date
+  const folder = new Date().toISOString().split('T')[0]
+
   // params required for `.upload` to work
   // more at documentation
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
   const params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: options.name,
+    // filepath is now to a folder by date with file type extension
+    Key: `${folder}/${options.name}${ext}`,
     Body: stream,
     ContentType: contentType
   }
