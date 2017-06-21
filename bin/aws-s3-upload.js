@@ -15,10 +15,17 @@ const fs = require('fs')
 // print to make sure it does
 console.log("file you're uploading is ", process.argv[2])
 
+// create an object to store the values passed in by
+// the user/command line
+const file = {
+  path: process.argv[2],
+  name: process.argv[3] || 'default'
+}
+
 // use node fs module to create a read stream
 // for our image file
 // https://www.sitepoint.com/basics-node-js-streams/
-const stream = fs.createReadStream(process.argv[2])
+const stream = fs.createReadStream(file.path)
 
 // params required for `.upload` to work
 // more at documentation
@@ -26,7 +33,7 @@ const stream = fs.createReadStream(process.argv[2])
 const params = {
   ACL: 'public-read',
   Bucket: process.env.AWS_S3_BUCKET_NAME,
-  Key:'padawan',
+  Key: file.name,
   Body: stream
 }
 
