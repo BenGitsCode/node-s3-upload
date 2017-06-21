@@ -11,6 +11,9 @@ const s3 = new AWS.S3()
 // require fs module
 const fs = require('fs')
 
+// require mime module
+const mime = require('mime')
+
 // script should accept file as 2nd argument
 // print to make sure it does
 console.log("file you're uploading is ", process.argv[2])
@@ -31,6 +34,10 @@ const s3Upload = function (options) {
   // https://www.sitepoint.com/basics-node-js-streams/
   const stream = fs.createReadStream(options.path)
 
+  // use node mime module to get image mime type
+  // https://www.npmjs.com/package/mime
+  const contentType = mime.lookup(options.path)
+
   // params required for `.upload` to work
   // more at documentation
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
@@ -38,7 +45,8 @@ const s3Upload = function (options) {
     ACL: 'public-read',
     Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: options.name,
-    Body: stream
+    Body: stream,
+    ContentType: contentType
   }
 
   // return a promise object that is resolved or rejected,
