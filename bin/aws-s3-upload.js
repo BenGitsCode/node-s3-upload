@@ -22,27 +22,47 @@ const file = {
   name: process.argv[3] || 'default'
 }
 
-// use node fs module to create a read stream
-// for our image file
-// https://www.sitepoint.com/basics-node-js-streams/
-const stream = fs.createReadStream(file.path)
+// s3Upload accepts file options as a param and returns a promise,
+// that resolved or rejected base on s3.upload response
+const s3Upload = function (options) {
 
-// params required for `.upload` to work
-// more at documentation
-// https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
-const params = {
-  ACL: 'public-read',
-  Bucket: process.env.AWS_S3_BUCKET_NAME,
-  Key: file.name,
-  Body: stream
+  // use node fs module to create a read stream
+  // for our image file
+  // https://www.sitepoint.com/basics-node-js-streams/
+  const stream = fs.createReadStream(options.path)
+
+  // params required for `.upload` to work
+  // more at documentation
+  // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
+  const params = {
+    ACL: 'public-read',
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: options.name,
+    Body: stream
+  }
+
+  // return a promise object that is resolved or rejected,
+  // based on the response from s3.upload
+  return new Promise((resolve, reject) => {
+
+    // pass correct params to `.upload`
+    // and anonymous callback for handling response
+    s3.upload(params, function (error, data) {
+
+       // reject promise if error
+       if (error) {
+         reject(error)
+       // resolve promise if no error
+       } else {
+         resolve(data)
+       }
+    })
+  })
 }
 
-// pass correct params to `.upload`
-// and anonymous allback for handling response
-s3.upload(params, function (error, data) {
-   if (error) {
-     console.error(error)
-   } else {
-     console.log(data)
-   }
-})
+// pass file to s3.Upload and begin promise chain
+s3Upload(file)
+ // .then((s3response) => console.log(s3response))
+ .then(console.log)
+ // .catch((error) => console.error(error))
+ .catch(console.error)
