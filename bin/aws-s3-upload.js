@@ -22,10 +22,8 @@ const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 
 // testing that dotenv module works and loads bucket name
-console.log('bucket to be uploaded to is ' + process.env.AWS_S3_BUCKET_NAME)
 // script should accept file as 2nd argument
 // print to make sure it does
-console.log('File to be uploaded ', process.argv[2])
 
 const file = {
   path: process.argv[2],
@@ -47,7 +45,6 @@ const randomBytesPromise = function () {
       if (error) {
         reject(error)
       } else {
-        console.log('inside crypto success', buffer.toString('hex'))
         resolve(buffer.toString('hex'))
       }
     })
@@ -60,12 +57,9 @@ const s3Upload = function (options) {
   // https://www.sitepoint.com/basics-node-js-streams/
   const stream = fs.createReadStream(options.path)
 
-  console.log('Stream is: ', stream)
-
   // use node mime module to get image mime type
   // https://www.npmjs.com/package/mime
   const contentType = mime.lookup(options.path)
-  console.log('contentType is: ', contentType)
 
   const ext = path.extname(options.path)
 
