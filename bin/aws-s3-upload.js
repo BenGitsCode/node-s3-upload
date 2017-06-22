@@ -24,7 +24,7 @@ const file = {
   bucket: process.env.AWS_S3_BUCKET_NAME
 }
 
-const S3Upload = function (options) {
+const s3Upload = function (options) {
   // use node fs module to create a read stream
   // for our image file
   // https://www.sitepoint.com/basics-node-js-streams/
