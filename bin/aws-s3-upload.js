@@ -18,26 +18,40 @@ console.log('bucket to be uploaded to is ' + process.env.AWS_S3_BUCKET_NAME)
 // print to make sure it does
 console.log('File to be uploaded ', process.argv[2])
 
-// use node fs module to create a read stream
-// for our image file
-// https://www.sitepoint.com/basics-node-js-streams/
-const stream = fs.createReadStream(process.argv[2])
-
-console.log('Stream is: ', stream)
-
-const params = {
-  ACL: 'public-read',
-  Bucket: process.env.AWS_S3_BUCKET_NAME,
-  Body: stream,
-  Key: process.argv[3] || 'default_name'
+const file = {
+  path: process.argv[2],
+  name: process.argv[3],
+  bucket: process.env.AWS_S3_BUCKET_NAME
 }
 
-// attempt s3.upload knowing it will fail to ensure the
-// module is required correctly
-s3.upload(params, function (error, data) {
-  if (error) {
-    console.error(error)
-  } else {
-    console.log(data)
+const S3Upload = function (options) {
+  // use node fs module to create a read stream
+  // for our image file
+  // https://www.sitepoint.com/basics-node-js-streams/
+  const stream = fs.createReadStream(options.path)
+
+  console.log('Stream is: ', stream)
+
+  const params = {
+    ACL: 'public-read',
+    Bucket: options.bucket,
+    Body: stream,
+    Key: options.name || 'default_name'
   }
-})
+
+  // return a promise object that is resolved or rejected,
+  // based on the response from s3.upload
+  return new Promise((resolve, reject) => {
+    // attempt s3.upload knowing it will fail to ensure the
+    // module is required correctly
+    s3.upload(params, function (error, data) {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
+S3Upload(file)
