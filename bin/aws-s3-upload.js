@@ -6,6 +6,9 @@ require('dotenv').load()
 // require fs module
 const fs = require('fs')
 
+// require mime module
+const mime = require('mime')
+
 // require aws-sdk module
 const AWS = require('aws-sdk')
 
@@ -32,11 +35,17 @@ const s3Upload = function (options) {
 
   console.log('Stream is: ', stream)
 
+  // use node mime module to get image mime type
+  // https://www.npmjs.com/package/mime
+  const contentType = mime.lookup(options.path)
+  console.log('contentType is: ', contentType)
+
   const params = {
     ACL: 'public-read',
     Bucket: options.bucket,
     Body: stream,
-    Key: options.name || 'default_name'
+    Key: options.name || 'default_name',
+    ContentType: contentType
   }
 
   // return a promise object that is resolved or rejected,
