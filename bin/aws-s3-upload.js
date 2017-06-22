@@ -23,7 +23,7 @@ console.log('File to be uploaded ', process.argv[2])
 // https://www.sitepoint.com/basics-node-js-streams/
 const stream = fs.createReadStream(process.argv[2])
 
-console.log('Stream is: ' + stream)
+console.log('Stream is: ', stream)
 
 const params = {
   ACL: 'public-read',
