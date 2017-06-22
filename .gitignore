@@ -1,5 +1,9 @@
-
 # Created by https://www.gitignore.io/api/macos,linux
+
+# SECRETS!
+
+.env
+credentials.csv
 
 ### macOS ###
 *.DS_Store
