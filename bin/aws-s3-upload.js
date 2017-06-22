@@ -54,4 +54,9 @@ const s3Upload = function (options) {
   })
 }
 
-S3Upload(file)
+// pass file to s3.Upload and begin promise chain
+s3Upload(file)
+ // .then((s3response) => console.log(s3response))
+ .then(console.log)
+ // .catch((error) => console.error(error))
+ .catch(console.error)
