@@ -40,11 +40,13 @@ const s3Upload = function (options) {
   const contentType = mime.lookup(options.path)
   console.log('contentType is: ', contentType)
 
+  const folder = new Date().toISOString().split('T')[0]
+
   const params = {
     ACL: 'public-read',
     Bucket: options.bucket,
     Body: stream,
-    Key: options.name || 'default_name',
+    Key: `${folder}/${options.name}` || 'default_name',
     ContentType: contentType
   }
 
