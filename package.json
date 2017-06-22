@@ -10,7 +10,8 @@
     "content": "CC­BY­NC­SA 4.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.75.0"
+    "aws-sdk": "^2.75.0",
+    "dotenv": "^4.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
