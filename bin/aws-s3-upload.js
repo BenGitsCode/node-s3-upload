@@ -3,7 +3,7 @@
 // require aws-sdk module
 const AWS = require('aws-sdk')
 
-//create a new instance of AWS.S3 object
+// create a new instance of AWS.S3 object
 const s3 = new AWS.S3()
 
 // require fs module
