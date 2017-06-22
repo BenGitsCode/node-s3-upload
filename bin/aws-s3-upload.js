@@ -29,7 +29,7 @@ const params = {
   ACL: 'public-read',
   Bucket: process.env.AWS_S3_BUCKET_NAME,
   Body: stream,
-  Key: 'with'
+  Key: process.argv[3] || 'default_name'
 }
 
 // attempt s3.upload knowing it will fail to ensure the
