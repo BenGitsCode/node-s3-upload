@@ -11,7 +11,7 @@ const fs = require('fs')
 
 // script should accept file as 2nd argument
 // print to make sure it does
-console.log("File to be uploaded ", process.argv[2])
+console.log('File to be uploaded ', process.argv[2])
 
 // attempt s3.upload knowing it will fail to ensure the
 // module is required correctly
